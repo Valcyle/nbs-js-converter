@@ -1,0 +1,16 @@
+harp
+bass
+bd
+snare
+hat
+guitar
+flute
+bell
+chime
+xylophone
+iron_xylophone
+cow_bell
+didgeridoo
+bit
+banjo
+pling
