@@ -9,3 +9,5 @@ Convert .nbs into .js music file which available play in music js player
 
 ## Support
 [Support Discord](https://discord.gg/f39pkTYdWS)
+
+name written as "valcyle" but changed name to "variable" in 2023/12/10
