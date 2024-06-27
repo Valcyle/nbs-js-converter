@@ -41,7 +41,7 @@ const char pitch[25][128] = {"F#", "G", "G#", "A", "A#", "B", "C", "C#", "D", "D
 "G2", "G#2", "A2", "A#2", "B2", "C2", "C#2", "D2", "D#2", "E2", "F2", "F#3"};
 
 
-int main(int argc[], char* argv[]){
+int main(int argc, char* argv[]){
     FILE* nbsfile;
     FILE* fp2;
     FILE* musicjs;
@@ -136,7 +136,7 @@ int main(int argc[], char* argv[]){
     //info print
     printf("nbsversion: %hhu\n", info.nbsversion);
     printf("vanilla_instrument_count: %hhu\n", info.vanillainstrumentcount);
-    printf("length: %hd\n", info.songlength);
+    printf("length: %hd\n", info.songlength / (info.tempo / 100));
     printf("layercount: %hd\n", info.layercount);
     printf("songname: %s\n", info.songname);
     printf("auther: %s\n", info.auther);
@@ -159,7 +159,7 @@ int main(int argc[], char* argv[]){
     //info write file
     fprintf(fp2, "nbsversion: %hhu\n", info.nbsversion);
     fprintf(fp2, "vanilla_instrument_count: %hhu\n", info.vanillainstrumentcount);
-    fprintf(fp2, "length: %hd\n", info.songlength);
+    fprintf(fp2, "length: %hd\n", info.songlength / (info.tempo / 100));
     fprintf(fp2, "layer_count: %hd\n", info.layercount);
     fprintf(fp2, "song_name: %s\n", info.songname);
     fprintf(fp2, "auther: %s\n", info.auther);
@@ -191,20 +191,13 @@ int main(int argc[], char* argv[]){
         if((int)jumptick > 0){
             fprintf(musicjs, "  ");
             printf("jump: %d\n", (int)jumptick);
-            // if((info.tempo / 100) >= 18){
-            //     calcwait = jumptick / 2.0; //10 //2
-            // }else if((info.tempo / 100) >= 13 && (info.tempo / 100) < 18){
-            //     calcwait = jumptick / 1.5; //15 //3
-            // }else if((info.tempo / 100) >= 7 && (info.tempo / 100) < 13){
-            //     calcwait = 2 * jumptick - 1; //19 //5
-            // }else{
-            //     calcwait = 3 * jumptick - 1; //29 //8
-            // }
             calcwait = (20.0 / (info.tempo / 100)) * jumptick - 1;
-            wait = roundf(calcwait);
-            if((info.tempo / 100) < 17 && wait == 0){
-                wait = 1;
+            if(calcwait <= 0 && (info.tempo / 100) > 16){
+                calcwait = 0.0;
+            }else if(calcwait <= 0){
+                calcwait = 1.0;
             }
+            wait = floorf(calcwait);
             
             for(int i = 0; i < wait; i++){
                 fprintf(musicjs, "[],");
